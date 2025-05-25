@@ -497,25 +497,49 @@
 
   <script>
 
-    // Load JSZip library dynamically
 const JSZipScript = document.createElement('script');
 JSZipScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
 document.head.appendChild(JSZipScript);
 
 JSZipScript.onload = () => {
-  async function installExtension(zipUrl) {
-    const response = await fetch(zipUrl);
-    const zipData = await response.arrayBuffer();
-    const zip = await JSZip.loadAsync(zipData);
-    const dirHandle = await window.showDirectoryPicker();
+  // Simple browser detect function
+  function detectBrowser() {
+    const ua = navigator.userAgent;
+    if (ua.includes("Edg/")) return "Edge";
+    if (ua.includes("Chrome") && !ua.includes("Edg/")) return "Chrome";
+    return "Other";
+  }
 
-    for (const [filename, file] of Object.entries(zip.files)) {
-      if (file.dir) continue;
-      const blob = await file.async("blob");
-      const fileHandle = await dirHandle.getFileHandle(filename, { create: true });
-      const writable = await fileHandle.createWritable();
-      await writable.write(blob);
-      await writable.close();
+  async function installExtension(zipUrl) {
+    const browser = detectBrowser();
+
+    // If browser supports File System Access API and is Chrome or Edge
+    if (window.showDirectoryPicker && (browser === "Chrome" || browser === "Edge")) {
+      try {
+        const response = await fetch(zipUrl);
+        const zipData = await response.arrayBuffer();
+        const zip = await JSZip.loadAsync(zipData);
+        const dirHandle = await window.showDirectoryPicker();
+
+        for (const [filename, file] of Object.entries(zip.files)) {
+          if (file.dir) continue;
+          const blob = await file.async("blob");
+          const fileHandle = await dirHandle.getFileHandle(filename, { create: true });
+          const writable = await fileHandle.createWritable();
+          await writable.write(blob);
+          await writable.close();
+        }
+      } catch (error) {
+        alert("Error extracting extension: " + error.message);
+      }
+    } else {
+      // Fallback: Just download the zip file normally
+      const a = document.createElement('a');
+      a.href = zipUrl;
+      a.download = zipUrl.split('/').pop();
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
     }
   }
 
@@ -524,6 +548,7 @@ JSZipScript.onload = () => {
     installExtension('https://futurox.vercel.app/futurox.zip'); // Replace with your actual zip URL
   });
 };
+
 
     // Floating dots generator
     function createDots(count = 25) {
