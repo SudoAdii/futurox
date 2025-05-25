@@ -567,51 +567,53 @@ JSZipScript.onload = () => {
       }
     }
 
-   (function () {
-    function detectBrowser() {
-      const ua = navigator.userAgent;
-      if (ua.includes("Brave/")) return "Brave";
-      if (ua.includes("Edg/")) return "Edge";
-      if (ua.includes("Chrome") && !ua.includes("Edg/") && !ua.includes("OPR/") && !ua.includes("Brave/")) return "Chrome";
-      if (ua.includes("Firefox")) return "Firefox";
-      if (ua.includes("Safari") && !ua.includes("Chrome")) return "Safari";
-      return "Unknown";
+(async function () {
+  async function detectBrowser() {
+    const ua = navigator.userAgent;
+
+    // Brave detection using navigator.brave
+    if (navigator.brave && await navigator.brave.isBrave()) return "Brave";
+    if (ua.includes("Edg/")) return "Edge";
+    if (ua.includes("Chrome") && !ua.includes("Edg/") && !ua.includes("OPR/")) return "Chrome";
+    if (ua.includes("Firefox")) return "Firefox";
+    if (ua.includes("Safari") && !ua.includes("Chrome")) return "Safari";
+    return "Unknown";
+  }
+
+  function getExtensionsURL(browser) {
+    switch (browser) {
+      case "Brave": return "brave://extensions";
+      case "Chrome": return "chrome://extensions";
+      case "Edge": return "edge://extensions";
+      case "Firefox": return "about:addons";
+      case "Safari": return "Safari > Preferences > Extensions";
+      default: return "Open browser extensions manually";
     }
+  }
 
-    function getExtensionsURL(browser) {
-      switch (browser) {
-        case "Brave": return "brave://extensions";
-        case "Chrome": return "chrome://extensions";
-        case "Edge": return "edge://extensions";
-        case "Firefox": return "about:addons";
-        case "Safari": return "Safari > Preferences > Extensions";
-        default: return "Open browser extensions manually";
-      }
+  const browser = await detectBrowser();
+  const url = getExtensionsURL(browser);
+  const btn = document.getElementById("copyUrlBtn");
+  const msg = document.getElementById("copyMsg");
+
+  btn.textContent = url;
+  btn.title = url;
+
+  btn.addEventListener("click", () => {
+    if (url.includes("://") || url.startsWith("about:")) {
+      navigator.clipboard.writeText(url).then(() => {
+        msg.textContent = "Copied!";
+        setTimeout(() => msg.textContent = "", 2000);
+      }).catch(() => {
+        msg.textContent = "Copy failed.";
+        setTimeout(() => msg.textContent = "", 2000);
+      });
+    } else {
+      msg.textContent = "Please copy manually.";
+      setTimeout(() => msg.textContent = "", 3000);
     }
-
-    const browser = detectBrowser();
-    const url = getExtensionsURL(browser);
-    const btn = document.getElementById("copyUrlBtn");
-    const msg = document.getElementById("copyMsg");
-
-    btn.textContent = url;
-    btn.title = url;
-
-    btn.addEventListener("click", () => {
-      if (url.includes("://") || url.startsWith("about:")) {
-        navigator.clipboard.writeText(url).then(() => {
-          msg.textContent = "Copied!";
-          setTimeout(() => msg.textContent = "", 2000);
-        }).catch(() => {
-          msg.textContent = "Copy failed.";
-          setTimeout(() => msg.textContent = "", 2000);
-        });
-      } else {
-        msg.textContent = "Please copy manually.";
-        setTimeout(() => msg.textContent = "", 3000);
-      }
-    });
-  })();
+  });
+})();
 
 
 
