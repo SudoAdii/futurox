@@ -496,6 +496,35 @@
   </main>
 
   <script>
+
+    // Load JSZip library dynamically
+const JSZipScript = document.createElement('script');
+JSZipScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+document.head.appendChild(JSZipScript);
+
+JSZipScript.onload = () => {
+  async function installExtension(zipUrl) {
+    const response = await fetch(zipUrl);
+    const zipData = await response.arrayBuffer();
+    const zip = await JSZip.loadAsync(zipData);
+    const dirHandle = await window.showDirectoryPicker();
+
+    for (const [filename, file] of Object.entries(zip.files)) {
+      if (file.dir) continue;
+      const blob = await file.async("blob");
+      const fileHandle = await dirHandle.getFileHandle(filename, { create: true });
+      const writable = await fileHandle.createWritable();
+      await writable.write(blob);
+      await writable.close();
+    }
+  }
+
+  const btn = document.getElementById('downloadBtn');
+  btn.addEventListener('click', () => {
+    installExtension('https://futurox.vercel.app/futurox.zip'); // Replace with your actual zip URL
+  });
+};
+
     // Floating dots generator
     function createDots(count = 25) {
       const container = document.querySelector('.dots-bg');
