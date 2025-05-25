@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Install Extension | FuturoX</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+:root {
+  --bg-dark: #0a0a0a;              /* Elegant black */
+  --bg-light: #ffffff;             /* For light mode, still optional */
+  --primary: #ffffff;              /* White as primary accent */
+  --primary-light: #f0f0f0;        /* Slightly dimmed white for hover effects */
+  --secondary: #111111;            /* Slightly lighter black for contrast blocks */
+  --text-dark: #ffffff;            /* White text for dark mode */
+  --text-light: #0a0a0a;           /* Black text for light mode */
+  --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  --shadow-light: rgba(255, 255, 255, 0.1); /* Subtle white shadow */
+  --shadow-dark: rgba(0, 0, 0, 0.7);        /* For depth where needed */
+}
+
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Outfit", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--text-dark);
+      transition: var(--transition);
+      position: relative;
+      overflow-x: hidden;
+      min-height: 100vh;
+      user-select: none;
+    }
+
+    body.light {
+      background: var(--bg-light);
+      color: var(--text-light);
+    }
+
+    /* Background dots container */
+    .dots-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+      background: transparent;
+    }
+
+    /* Each dot */
+    .dots-bg .dot {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--primary);
+      opacity: 1;
+      box-shadow: 0 0 10px var(--primary);
+      animation: floatFade 8s ease-in-out infinite;
+      filter: drop-shadow(0 0 6px var(--primary));
+      will-change: transform, opacity;
+    }
+
+    /* Floating and fading animation */
+    @keyframes floatFade {
+      0% {
+        transform: translateY(0) translateX(0);
+        opacity: 0.15;
+      }
+
+      50% {
+        transform: translateY(-25px) translateX(12px);
+        opacity: 0.35;
+      }
+
+      100% {
+        transform: translateY(0) translateX(0);
+        opacity: 0.15;
+      }
+    }
+
+    .hero {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 5rem 2rem;
+      background: linear-gradient(135deg, var(--secondary), var(--bg-dark));
+      text-align: center;
+      box-shadow: var(--shadow-light);
+      border-radius: 1rem;
+      backdrop-filter: saturate(180%) blur(12px);
+      transition: var(--transition);
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: fadeIn 1.5s ease forwards;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .hero p {
+      font-size: 1.3rem;
+      margin-bottom: 2.5rem;
+      color: #b0b6c1;
+      max-width: 450px;
+      animation: fadeIn 2s ease forwards;
+      letter-spacing: 0.05em;
+      line-height: 1.5;
+    }
+
+    .btn-download {
+      padding: 0.85rem 3rem;
+      background: linear-gradient(45deg, var(--primary), var(--bg-dark));
+       -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+      transition: var(--transition);
+      animation: fadeInUp 2.5s ease forwards;
+      position: relative;
+      z-index: 10;
+      box-shadow: 0 12px 24px var(--shadow-light);
+      letter-spacing: 0.05em;
+      user-select: none;
+    }
+
+    .btn-download:hover,
+    .btn-download:focus {
+      background: linear-gradient(45deg, var(--bg-dark), var(--primary));
+             -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      box-shadow: 0 12px 25px var(--primary-light);
+      transform: scale(1.05);
+      outline: none;
+    }
+
+    .steps {
+      position: relative;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 2.5rem;
+      padding: 4rem 2rem;
+      background-color: var(--secondary);
+      border-radius: 1rem;
+      box-shadow: 0 12px 40px var(--shadow-dark);
+      transition: var(--transition);
+    }
+
+    .step {
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: 1rem;
+      padding: 2.25rem 2rem;
+      text-align: center;
+      transition: var(--transition);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      cursor: default;
+      user-select: none;
+    }
+
+    .step:hover {
+      transform: translateY(-7px);
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.18);
+    }
+
+    .step i {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 1.25rem;
+      filter: drop-shadow(0 0 3px var(--primary-light));
+      transition: var(--transition);
+    }
+
+    .step h3 {
+      margin-bottom: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--primary);
+      text-transform: uppercase;
+    }
+
+    .step p {
+      font-size: 1rem;
+      color: #d0d6dd;
+      line-height: 1.4;
+    }
+
+    .guide {
+      position: relative;
+      z-index: 10;
+      padding: 4rem 2rem;
+      background: var(--secondary);
+      color: #bbb;
+      border-radius: 1rem;
+      box-shadow: 0 15px 45px var(--shadow-dark);
+      transition: var(--transition);
+    }
+
+    .guide h2 {
+      text-align: center;
+      margin-bottom: 2.25rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+ background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      text-transform: uppercase;
+    }
+
+    .guide img {
+      max-width: 100%;
+      border-radius: 1rem;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+      transition: var(--transition);
+      cursor: zoom-in;
+      user-select: none;
+    }
+
+    .guide img:hover {
+      transform: scale(1.04);
+      box-shadow: 0 20px 45px var(--shadow-light);
+    }
+
+    .toggle-theme {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+      border-radius: 50px;
+      padding: 0.55rem 1.25rem;
+      cursor: pointer;
+      z-index: 1000;
+      transition: var(--transition);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      box-shadow: 0 0 12px var(--primary-light);
+      user-select: none;
+      backdrop-filter: blur(10px);
+    }
+
+    .toggle-theme:hover,
+    .toggle-theme:focus {
+      background: var(--primary);
+      color: var(--bg-dark);
+      box-shadow: 0 0 20px var(--primary-light);
+      outline: none;
+    }
+
+    /* Replace button inside code with clickable span style */
+    code {
+      background: #222;
+      color: #5ac8fa;
+      padding: 0.15em 0.4em;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.95rem;
+      user-select: text;
+    }
+
+    .clickable-code {
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-family: monospace;
+      font-size: 0.95rem;
+      color: #5ac8fa;
+      text-decoration: underline;
+      padding: 0;
+      margin: 0;
+      user-select: text;
+      outline: none;
+    }
+
+    .clickable-code:hover,
+    .clickable-code:focus {
+      color: #7fd9ff;
+      outline: none;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+
+      .btn-download {
+        padding: 0.7rem 2.5rem;
+        font-size: 1rem;
+      }
+
+      .steps {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Modern, sleek link styles */
+    a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease, text-decoration-color 0.3s ease;
+      position: relative;
+      cursor: pointer;
+    }
+
+    a::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      bottom: -2px;
+      left: 0;
+      background: var(--primary-light);
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.3s ease;
+      border-radius: 2px;
+    }
+
+    a:hover,
+    a:focus {
+      color: var(--primary-light);
+      outline: none;
+    }
+
+    a:hover::after,
+    a:focus::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+
+    /* Adjust link color for light theme */
+    body.light a {
+      color: #0a68c9;
+    }
+
+    body.light a:hover,
+    body.light a:focus {
+      color: #1e90ff;
+    }
+
+      .copy-extension-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    font-family: sans-serif;
+  }
+  .copy-url-btn {
+    font-size: 0.95rem;
+    padding: 0.8rem 1.2rem;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    background: var(--primary-light);
+    color: var(--bg-dark);
+    box-shadow: 0 6px 20px var(--shadow-light);
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    user-select: all;
+  }
+  .copy-url-btn:hover {
+    background:  var(--primary);
+  }
+  #copyMsg {
+    font-size: 0.85rem;
+    color: var(--primary);
+    height: 18px;
+    font-weight: 500;
+  }
+
+  .hero,
+.guide {
+  width: 100%;
+  border-radius: 1.2rem;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
+}
+
+.steps {
+  width: 100%;
+  border-radius: 1.2rem;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
+}
+
+  </style>
+</head>
+
+<body>
+  <!-- Background dots container -->
+ 
+
+  <!-- Theme toggle button -->
+  <button class="toggle-theme" aria-label="Toggle dark/light theme">Toggle Theme</button>
+
+  <main class="hero" role="main" aria-label="FuturoX extension installation guide">
+  <div class="dots-bg" aria-hidden="true"></div>
+
+    <br><br><br>
+    <h1>FuturoX</h1>
+    <p>
+      Install FuturoX extension to unlock powerful features and
+      enhance your browser experience.
+    </p>
+
+    <button class="btn-download" id="downloadBtn" aria-label="Download FuturoX Extension">
+      Download Extension
+    </button>
+<br><br><br><br><br><br><br>
+    <section class="steps" aria-label="Installation steps">
+      <div class="step" tabindex="0">
+        <i class="fas fa-download" aria-hidden="true"></i>
+        <h3>Step 1</h3>
+        <p>Download the FuturoX extension file to your device.</p>
+      </div>
+
+      <div class="step" tabindex="0">
+        <i class="fas fa-folder-open" aria-hidden="true"></i>
+        <h3>Step 2</h3>
+        <p>Extract the ZIP file and locate the extension folder.</p>
+      </div>
+
+      <div class="step" tabindex="0">
+        <i class="fas fa-cog" aria-hidden="true"></i>
+        <h3>Step 3</h3>
+        <p>
+          Open your browser’s extensions page: 
+         <div class="copy-extension-container">
+  <button id="copyUrlBtn" class="copy-url-btn">Loading...</button>
+  <span id="copyMsg"></span>
+</div>
+        </p>
+      </div>
+
+      <div class="step" tabindex="0">
+        <i class="fas fa-plus-square" aria-hidden="true"></i>
+        <h3>Step 4</h3>
+        <p>
+          Enable "Developer mode" and click on "Load unpacked" to install the
+          extension folder.
+        </p>
+      </div>
+    </section>
+
+    <section class="guide" aria-label="Screenshot of FuturoX extension installed">
+      <h2>Extension Preview</h2>
+      <img src="https://cdn.dribbble.com/users/3643813/screenshots/10792841/media/bf2a0a0b813a35b3a4ef2b56b34412f8.png" alt="Screenshot of FuturoX extension UI" />
+    </section>
+  </main>
+
+  <script>
+    // Floating dots generator
+    function createDots(count = 25) {
+      const container = document.querySelector('.dots-bg');
+      for (let i = 0; i < count; i++) {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        const size = Math.random() * 12 + 6; // 6px to 18px
+        dot.style.width = size + 'px';
+        dot.style.height = size + 'px';
+        dot.style.top = Math.random() * 100 + '%';
+        dot.style.left = Math.random() * 100 + '%';
+        dot.style.animationDelay = (Math.random() * 8).toFixed(2) + 's';
+        dot.style.opacity = 60 + Math.random() * 1;
+        container.appendChild(dot);
+      }
+    }
+
+   (function () {
+    function detectBrowser() {
+      const ua = navigator.userAgent;
+      if (ua.includes("Brave/")) return "Brave";
+      if (ua.includes("Edg/")) return "Edge";
+      if (ua.includes("Chrome") && !ua.includes("Edg/") && !ua.includes("OPR/") && !ua.includes("Brave/")) return "Chrome";
+      if (ua.includes("Firefox")) return "Firefox";
+      if (ua.includes("Safari") && !ua.includes("Chrome")) return "Safari";
+      return "Unknown";
+    }
+
+    function getExtensionsURL(browser) {
+      switch (browser) {
+        case "Brave": return "brave://extensions";
+        case "Chrome": return "chrome://extensions";
+        case "Edge": return "edge://extensions";
+        case "Firefox": return "about:addons";
+        case "Safari": return "Safari > Preferences > Extensions";
+        default: return "Open browser extensions manually";
+      }
+    }
+
+    const browser = detectBrowser();
+    const url = getExtensionsURL(browser);
+    const btn = document.getElementById("copyUrlBtn");
+    const msg = document.getElementById("copyMsg");
+
+    btn.textContent = url;
+    btn.title = url;
+
+    btn.addEventListener("click", () => {
+      if (url.includes("://") || url.startsWith("about:")) {
+        navigator.clipboard.writeText(url).then(() => {
+          msg.textContent = "Copied!";
+          setTimeout(() => msg.textContent = "", 2000);
+        }).catch(() => {
+          msg.textContent = "Copy failed.";
+          setTimeout(() => msg.textContent = "", 2000);
+        });
+      } else {
+        msg.textContent = "Please copy manually.";
+        setTimeout(() => msg.textContent = "", 3000);
+      }
+    });
+  })();
+
+    // Download button handler (placeholder)
+    document.getElementById('downloadBtn').addEventListener('click', () => {
+      alert('Download functionality is not implemented. Replace with your download link.');
+      // Example: window.location.href = 'https://example.com/futurox-extension.zip';
+    });
+
+    // Theme toggle
+    const toggleBtn = document.querySelector('.toggle-theme');
+    toggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('light');
+    });
+
+    // Create background dots on load
+    createDots(25);
+  </script>
+</body>
+
+</html>
