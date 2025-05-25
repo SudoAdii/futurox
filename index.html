@@ -269,6 +269,19 @@
       color: var(--bg-dark);
       box-shadow: 0 0 20px var(--primary-light);
       outline: none;
+      transform: scale(1.05);
+    }
+
+   .modal-content h2 {
+      font-size: 1.75rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: fadeIn 1.5s ease forwards;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-weight: 700;
     }
 
     /* Replace button inside code with clickable span style */
@@ -430,6 +443,66 @@
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
 }
 
+
+
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.4s ease, visibility 0.4s;
+      z-index: 999;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-content {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 2rem;
+      width: 90%;
+      max-width: 500px;
+      color: var(--primary-light);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      transform: scale(0.95);
+      opacity: 0;
+      transition: transform 0.4s ease, opacity 0.4s ease;
+      position: relative;
+    }
+
+    .modal-overlay.active .modal-content {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 1.75rem;
+      background: transparent;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+
+    .modal-close:hover {
+       color: var(--primary);
+      background: transparent;
+      filter: drop-shadow(0 0 3px var(--primary-light));
+      transform: scale(1.3);
+    }
   </style>
 </head>
 
@@ -438,7 +511,19 @@
  
 
   <!-- Theme toggle button -->
-  <button class="toggle-theme" aria-label="Toggle dark/light theme">Whats FuturoX</button>
+   <button class="toggle-theme" aria-label="Toggle dark/light theme">Whats FuturoX</button>
+
+  <div class="modal-overlay" id="infoModal">
+    <div class="modal-content">
+      <button class="modal-close" aria-label="Close popup">⤫</button>
+      <h2>What is FuturoX?</h2>
+      <p>
+FuturoX is a next-generation browser extension purpose-built for high-performance crypto operations — combining AI-powered Bot, wallet automation, and transaction bundling into one streamlined, professional-grade interface.
+<br><br>
+Designed for users operating in high-volatility environments, FuturoX provides full control over execution timing, liquidity extraction strategies, and batch transaction workflows. Whether you're managing aggressive token launches or conducting complex multi-wallet operations, FuturoX offers the tools required for precision, speed, and stealth.
+      </p>
+    </div>
+  </div>
 
   <main class="hero" role="main" aria-label="FuturoX extension installation guide">
   <div class="dots-bg" aria-hidden="true"></div>
@@ -616,14 +701,29 @@ JSZipScript.onload = () => {
 
 
 
-    // Theme toggle
-    const toggleBtn = document.querySelector('.toggle-theme');
-    toggleBtn.addEventListener('click', () => {
-      document.body.classList.toggle('light');
-    });
+
 
     // Create background dots on load
     createDots(25);
+
+
+        const openBtn = document.querySelector('.toggle-theme');
+    const modal = document.getElementById('infoModal');
+    const closeBtn = modal.querySelector('.modal-close');
+
+    openBtn.addEventListener('click', () => {
+      modal.classList.add('active');
+    });
+
+    closeBtn.addEventListener('click', () => {
+      modal.classList.remove('active');
+    });
+
+    // Optional: close on clicking outside modal
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) modal.classList.remove('active');
+    });
+
   </script>
 </body>
 
